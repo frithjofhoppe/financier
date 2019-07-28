@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Third Line</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button *ngIf="!isAuthenticated" (click)="login()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+      <mat-icon>input</mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="isAuthenticated" (click)="logout()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+      <mat-icon>lock</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+{{profile | json}}
