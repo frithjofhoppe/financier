@@ -16,7 +16,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("**").permitAll()
                 .mvcMatchers("/api/**").authenticated()
-//                .mvcMatchers("/api/accountmovement").hasAuthority("SCOPE_read:account_movement")
+                .mvcMatchers("/api/accountmovement").hasAuthority("SCOPE_read:account_movement")
                 .and()
                 .oauth2ResourceServer().jwt();
     }
