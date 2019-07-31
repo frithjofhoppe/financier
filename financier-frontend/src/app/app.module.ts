@@ -7,6 +7,7 @@ import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/materia
 import { CallbackComponent } from './authentication/callback/callback.component';
 import { LogoutComponent } from './authentication/logout/logout.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { NavigationComponent } from './navigation/navigation.component';
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

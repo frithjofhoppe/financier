@@ -39,7 +39,7 @@ export class NavigationComponent implements OnInit {
   logout() {
     this.authClient.logout({
       client_id: this.auth.config.client_id,
-      returnTo: window.location.origin
+      returnTo: 'http://localhost:4200/logout'
     });
   }
 }

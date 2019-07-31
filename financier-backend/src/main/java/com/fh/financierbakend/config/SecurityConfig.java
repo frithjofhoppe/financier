@@ -8,16 +8,26 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+
+import javax.servlet.*;
+import java.io.IOException;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("**").permitAll()
-                .mvcMatchers("/api/**").authenticated()
-                .mvcMatchers("/api/accountmovement").hasAuthority("SCOPE_read:account_movement")
+                .mvcMatchers("/api/accountmovement").hasRole("read:account_movement")
                 .and()
+                .addFilterAfter(new Filter() {
+                    @Override
+                    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+                    }
+                }, BasicAuthenticationFilter.class)
                 .oauth2ResourceServer().jwt();
     }
 

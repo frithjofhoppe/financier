@@ -2,6 +2,7 @@ package com.fh.financierbakend.controller;
 
 import com.fh.financierbakend.dto.AccountMovementDto;
 import com.fh.financierbakend.service.AccountMovementService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
