@@ -20,15 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/api/accountmovement").hasRole("read:account_movement")
+                .mvcMatchers("/api/accountmovement").hasAuthority("read:account_movement")
                 .and()
-                .addFilterAfter(new Filter() {
-                    @Override
-                    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-                    }
-                }, BasicAuthenticationFilter.class)
-                .oauth2ResourceServer().jwt();
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(new JwtGrantedAuthorityExtractor());
     }
 
     @Value("${auth0.audience}")
