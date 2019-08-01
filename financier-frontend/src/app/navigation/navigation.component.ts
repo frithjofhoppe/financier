@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../authentication/auth.service';
 import {from} from 'rxjs';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
+import {map} from 'rxjs/operators';
+import {AuthenticationProcessService} from '../authentication/authentication-process.service';
 
 @Component({
   selector: 'app-navigation',
@@ -10,36 +12,28 @@ import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 })
 export class NavigationComponent implements OnInit {
 
-  isAuthenticated = false;
-  profile: any;
-  private authClient: Auth0Client;
+  result: any;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private authProcess: AuthenticationProcessService) {
   }
 
-  async ngOnInit() {
-    // Get an instance of the Auth0 client
-    this.authClient = await this.auth.getAuth0Client();
-
-    // Watch for changes to the isAuthenticated state
-    this.auth.isAuthenticated.subscribe(value => {
-      this.isAuthenticated = value;
-    });
-
-    // Watch for changes to the profile data
-    this.auth.profile.subscribe(profile => {
-      this.profile = profile;
-    });
+  ngOnInit(): void {
+    this.auth.localAuthSetup();
   }
 
-  async login() {
-    await this.authClient.loginWithRedirect({});
+  fetchToken() {
+    this.token().subscribe(res => this.result = res);
   }
 
-  logout() {
-    this.authClient.logout({
-      client_id: this.auth.config.client_id,
-      returnTo: 'http://localhost:4200/logout'
-    });
+
+
+  token() {
+    return this.auth.auth0Client$.pipe(
+      map(t => t.getTokenSilently({
+        audience: 'a5VZ2jUfcH150vqpBpxrXjB2XePKtDw4',
+        redirect_uri: 'http://localhost:4200/callback',
+        scope: 'openid profile email'
+      }))
+    );
   }
 }

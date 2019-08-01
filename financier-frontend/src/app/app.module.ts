@@ -8,6 +8,7 @@ import { CallbackComponent } from './authentication/callback/callback.component'
 import { LogoutComponent } from './authentication/logout/logout.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import {HttpClientModule} from '@angular/common/http';
+import {JwtHelperService, JwtModule} from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {HttpClientModule} from '@angular/common/http';
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    HttpClientModule
+    HttpClientModule,
+    JwtModule.forRoot({})
   ],
   providers: [],
   bootstrap: [AppComponent]

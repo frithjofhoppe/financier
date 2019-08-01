@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthService} from './authentication/auth.service';
-import {mergeMap} from 'rxjs/operators';
+import {mergeMap, tap} from 'rxjs/operators';
+import {AuthenticationProcessService} from './authentication/authentication-process.service';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ import {mergeMap} from 'rxjs/operators';
 export class AppComponent {
   title = 'financier-frontend';
 
-  constructor(private http: HttpClient, private auth: AuthService) {
+  constructor(private http: HttpClient, private auth: AuthService, private process: AuthenticationProcessService) {
   }
 
   getAccountMovement() {
@@ -26,13 +27,18 @@ export class AppComponent {
       movementDirection: 'DEBIT'
     };
 
-    this.auth.profile.pipe(
+    this.auth.auth0Client$.pipe(
+      tap(profile => console.log(profile.getTokenSilently()))
+    ).subscribe();
+
+    this.auth.auth0Client$.pipe(
       mergeMap(profile => this.http.post<AccountMovement>('http://localhost:8080/api/accountmovement', m, {
-        withCredentials: true,
-        headers: new HttpHeaders({
-          Authorization: `Bearer ${profile}`
+          withCredentials: true,
+          headers: new HttpHeaders({
+            Authorization: `Bearer ${profile.getTokenSilently()}`
+          })
         })
-      }))
+      )
     ).subscribe();
   }
 }

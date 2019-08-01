@@ -12,10 +12,9 @@ import java.util.stream.Collectors;
 
 public class JwtGrantedAuthorityExtractor extends JwtAuthenticationConverter {
 
-    private final String namespace = "https://frithjofhome.synology.me";
-
     @Override
     protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+        String namespace = "https://frithjofhome.synology.me";
         Collection<String> permissions = (Collection<String>) jwt.getClaims().get(namespace + "permissions");
         return permissions
                 .stream()
