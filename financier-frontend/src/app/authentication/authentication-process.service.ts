@@ -7,6 +7,8 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import {NoAuthorizationParamsFoundError} from './model/no-authorization-params-found-error';
 import {removeWhitespaces} from '@angular/compiler/src/ml_parser/html_whitespaces';
 import {BasicTokenValidationError} from './model/basic-token-validation-error';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,42 +21,60 @@ export class AuthenticationProcessService {
   private readonly scope = 'openid profile email';
   private readonly redirectUri = 'http://localhost:4200/callback';
   private readonly responseType = 'id_token token';
-  private readonly localStoreStateKey = `${this.audience}_state`;
-  private readonly localStoreNonceKey = `${this.audience}_nonce`;
-  private readonly localStoreAccessTokenKey = `${this.audience}_accessToken`;
-  private readonly localStoreIdTokenKey = `${this.audience}_idToken`;
+  private readonly cookieStateKey = `${this.audience}_state`;
+  private readonly cookieNonceKey = `${this.audience}_nonce`;
+  private readonly cookieAccessTokenKey = `${this.audience}_accessToken`;
+  private readonly cookieIdTokenKey = `${this.audience}_idToken`;
+  private readonly cookieKeys = [
+    this.cookieStateKey,
+    this.cookieNonceKey,
+    this.cookieAccessTokenKey,
+    this.cookieIdTokenKey
+  ];
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private jwtHelper: JwtHelperService) {
+  isUserLoggedIn: Observable<boolean>;
+  userProfile: Observable<JwtUserProfile>;
+
+  private isUserLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private userProfileSubject = new BehaviorSubject<JwtUserProfile>(null);
+
+  constructor(
+    private http: HttpClient,
+    private route: ActivatedRoute,
+    private jwtHelper: JwtHelperService,
+    private cookieService: CookieService) {
+    this.isUserLoggedIn = this.isUserLoggedInSubject.asObservable();
+    this.userProfile = this.userProfileSubject.asObservable();
   }
 
   private generateState(): void {
     const state = nanoid(9);
-    localStorage.setItem(this.localStoreStateKey, state);
+    this.cookieService.set(this.cookieStateKey, state);
   }
 
   private getState(): string {
-    const state = this.getLocalStorageItem(this.localStoreStateKey);
+    const state = this.getCookie(this.cookieStateKey);
     if (!state) {
       this.generateState();
     }
-    return this.getLocalStorageItem(this.localStoreStateKey);
+    return this.getCookie(this.cookieStateKey);
   }
 
   private generateNonce(): void {
     const nonce = nanoid(16);
-    localStorage.setItem(this.localStoreNonceKey, nonce);
+    this.cookieService.set(this.cookieNonceKey, nonce);
   }
 
   private getNonce(): string {
-    const nonce = this.getLocalStorageItem(this.localStoreNonceKey);
+    const nonce = this.getCookie(this.cookieNonceKey);
     if (!nonce) {
       this.generateNonce();
     }
-    return this.getLocalStorageItem(this.localStoreNonceKey);
+    return this.getCookie(this.cookieNonceKey);
   }
 
-  private getLocalStorageItem(key: string) {
-    return localStorage.getItem(key);
+  private getCookie(key: string) {
+    return this.cookieService.get(key);
   }
 
   public redirectToLogin() {
@@ -68,14 +88,43 @@ export class AuthenticationProcessService {
       '&nonce=' + this.getNonce();
   }
 
+  public redirectToLogout() {
+    this.updateStateForLogout();
+    window.location.href = 'https://frithjofhoppe.auth0.com/v2/logout?' +
+      'client_id=' + this.clientId +
+      '&returnTo=http://localhost:4200/logout';
+  }
+
   public handleCallback() {
-    this.persistCallbackResponse();
+    try {
+      this.persistCallbackResponse();
+      this.updateStateForLogin();
+    } catch (e) {
+      this.updateStateForLogout();
+      throw e;
+    }
+  }
+
+  private updateStateForLogin() {
+    try {
+      const profile = this.getProfile();
+      this.userProfileSubject.next(profile);
+      this.isUserLoggedInSubject.next(true);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  private updateStateForLogout() {
+    this.isUserLoggedInSubject.next(false);
+    this.userProfileSubject.next(null);
+    this.cookieKeys.forEach(key => this.cookieService.delete(key));
   }
 
   private validateToken(requestState: string) {
     const profile = this.getProfile();
-    const storeState = this.getLocalStorageItem(this.localStoreStateKey);
-    const storeNonce = this.getLocalStorageItem(this.localStoreNonceKey);
+    const storeState = this.getCookie(this.cookieStateKey);
+    const storeNonce = this.getCookie(this.cookieNonceKey);
 
     if (profile.nonce !== storeNonce) {
       throw new BasicTokenValidationError('Nonce from idToken not match with expected value');
@@ -83,6 +132,15 @@ export class AuthenticationProcessService {
 
     if (requestState !== storeState) {
       throw new BasicTokenValidationError('State from request not match with expected value');
+    }
+    this.validateTokenExpirationTime(profile);
+  }
+
+  private validateTokenExpirationTime(profile: JwtUserProfile) {
+    console.log(new Date());
+    console.log(new Date(Number(profile.exp) * 1000))
+    if (new Date() >= new Date(Number(profile.exp) * 1000)) {
+      throw new BasicTokenValidationError('Token has expired');
     }
   }
 
@@ -96,8 +154,8 @@ export class AuthenticationProcessService {
     if (!response.accessToken || !response.idToken || !response.state) {
       throw new NoAuthorizationParamsFoundError('AccessToken, IdToken or State weren\'t transmitted with callback request');
     }
-    localStorage.setItem(this.localStoreAccessTokenKey, response.accessToken);
-    localStorage.setItem(this.localStoreIdTokenKey, response.idToken);
+    this.cookieService.set(this.cookieAccessTokenKey, response.accessToken);
+    this.cookieService.set(this.cookieIdTokenKey, response.idToken);
     this.validateToken(response.state);
   }
 
@@ -113,12 +171,28 @@ export class AuthenticationProcessService {
   }
 
   private getProfile(): JwtUserProfile {
-    const rawProfile = this.jwtHelper.decodeToken(this.getLocalStorageItem(this.localStoreIdTokenKey));
+    const rawProfile = this.jwtHelper.decodeToken(this.getCookie(this.cookieIdTokenKey));
+
+    if (!rawProfile) {
+      throw new Error('Profile is empty');
+    }
+
     const profile = rawProfile as JwtUserProfile;
     profile.permissions = rawProfile[`${this.audience}permissions`];
     profile.roles = rawProfile[`${this.audience}roles`];
     profile.groups = rawProfile[`${this.audience}groups`];
     return profile;
+  }
+
+  public autoLogin(): void {
+    try {
+      const idToken = this.getCookie(this.cookieIdTokenKey);
+      if (idToken) {
+        this.validateTokenExpirationTime(this.getProfile());
+        this.updateStateForLogin();
+      }
+    } catch (e) {
+    }
   }
 }
 

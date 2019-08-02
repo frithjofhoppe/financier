@@ -9,6 +9,7 @@ import { LogoutComponent } from './authentication/logout/logout.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import {HttpClientModule} from '@angular/common/http';
 import {JwtHelperService, JwtModule} from '@auth0/angular-jwt';
+import {CookieService} from 'ngx-cookie-service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import {JwtHelperService, JwtModule} from '@auth0/angular-jwt';
     HttpClientModule,
     JwtModule.forRoot({})
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

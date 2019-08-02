@@ -2,10 +2,10 @@
   <mat-toolbar-row>
     <span>Third Line</span>
     <span class="example-spacer"></span>
-    <button mat-icon-button *ngIf="true" (click)="authProcess.redirectToLogin()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+    <button mat-icon-button *ngIf="!(authProcess.isUserLoggedIn | async)" (click)="authProcess.redirectToLogin()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
       <mat-icon>input</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="false" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+    <button mat-icon-button *ngIf="authProcess.isUserLoggedIn | async" (click)="authProcess.redirectToLogout()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
       <mat-icon>lock</mat-icon>
     </button>
   </mat-toolbar-row>

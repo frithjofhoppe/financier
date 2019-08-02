@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthService} from './authentication/auth.service';
 import {mergeMap, tap} from 'rxjs/operators';
@@ -9,10 +9,14 @@ import {AuthenticationProcessService} from './authentication/authentication-proc
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'financier-frontend';
 
   constructor(private http: HttpClient, private auth: AuthService, private process: AuthenticationProcessService) {
+  }
+
+  ngOnInit(): void {
+    this.process.autoLogin();
   }
 
   getAccountMovement() {

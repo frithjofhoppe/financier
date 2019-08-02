@@ -30,6 +30,7 @@
     "jws": "^3.2.2",
     "material-design-icons": "^3.0.1",
     "nanoid": "^2.0.3",
+    "ngx-cookie-service": "^2.2.0",
     "randomstring": "^1.1.5",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0",
