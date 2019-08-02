@@ -34,9 +34,11 @@ export class AuthenticationProcessService {
 
   isUserLoggedIn: Observable<boolean>;
   userProfile: Observable<JwtUserProfile>;
+  jwt: Observable<string>;
 
   private isUserLoggedInSubject = new BehaviorSubject<boolean>(false);
   private userProfileSubject = new BehaviorSubject<JwtUserProfile>(null);
+  private jwtSubject = new BehaviorSubject<string>(null);
 
   constructor(
     private http: HttpClient,
@@ -45,6 +47,7 @@ export class AuthenticationProcessService {
     private cookieService: CookieService) {
     this.isUserLoggedIn = this.isUserLoggedInSubject.asObservable();
     this.userProfile = this.userProfileSubject.asObservable();
+    this.jwt = this.jwtSubject.asObservable();
   }
 
   private generateState(): void {
@@ -110,6 +113,7 @@ export class AuthenticationProcessService {
       const profile = this.getProfile();
       this.userProfileSubject.next(profile);
       this.isUserLoggedInSubject.next(true);
+      this.jwtSubject.next(this.getCookie(this.cookieIdTokenKey));
     } catch (e) {
       throw e;
     }
@@ -118,6 +122,7 @@ export class AuthenticationProcessService {
   private updateStateForLogout() {
     this.isUserLoggedInSubject.next(false);
     this.userProfileSubject.next(null);
+    this.jwtSubject.next(null);
     this.cookieKeys.forEach(key => this.cookieService.delete(key));
   }
 
