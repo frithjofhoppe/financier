@@ -1,15 +1,30 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span>Third Line</span>
-    <span class="example-spacer"></span>
-    <button mat-icon-button *ngIf="!(authProcess.isUserLoggedIn | async)" (click)="authProcess.redirectToLogin()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
-      <mat-icon>input</mat-icon>
-    </button>
-    <button mat-icon-button *ngIf="authProcess.isUserLoggedIn | async" (click)="authProcess.redirectToLogout()" class="example-icon" aria-hidden="false" aria-label="Example heart icon">
-      <mat-icon>lock</mat-icon>
-    </button>
-  </mat-toolbar-row>
-</mat-toolbar>
-<button mat-raised-button (click)="fetchToken()">Fetch token</button>
-{{this.auth.userProfile$ | async | json}}
-{{result}}
+<div fxFlex fxLayout="column">
+  <mat-toolbar fxFlex="6" color="primary">
+    <mat-toolbar-row>
+      <button mat-icon-button (click)="toogle()">
+        <mat-icon>reorder</mat-icon>
+      </button>
+      <span>Financier</span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button *ngIf="!(authProcess.isUserLoggedIn | async)" (click)="authProcess.redirectToLogin()"
+              class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+        <mat-icon>input</mat-icon>
+      </button>
+      <button mat-icon-button *ngIf="authProcess.isUserLoggedIn | async" (click)="authProcess.redirectToLogout()"
+              class="example-icon" aria-hidden="false" aria-label="Example heart icon">
+        <mat-icon>lock</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <mat-sidenav-container fxFlex fxFlexFill>
+    <mat-sidenav fxFlex #sidenav mode="side">
+      <mat-nav-list >
+        <a mat-button routerLink="/home">Home</a>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content fxFlex fxFlexFill>
+      <ng-content></ng-content>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
