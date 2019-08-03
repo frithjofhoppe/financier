@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {MatButtonModule, MatIconModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
 import {CallbackComponent} from './authentication/callback/callback.component';
 import {LogoutComponent} from './authentication/logout/logout.component';
 import {NavigationComponent} from './navigation/navigation.component';
@@ -13,6 +13,11 @@ import {CookieService} from 'ngx-cookie-service';
 import {AuthenticationProcessService} from './authentication/authentication-process.service';
 import {tap} from 'rxjs/operators';
 import {JwtInterceptorService} from './authentication/jwt-interceptor.service';
+import { HomeComponent } from './home/home.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import { ContainerComponent } from './common/container/container.component';
+import { AccountMovementComponent } from './account-movement/account-movement.component';
 
 
 export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
@@ -31,7 +36,10 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     AppComponent,
     CallbackComponent,
     LogoutComponent,
-    NavigationComponent
+    NavigationComponent,
+    HomeComponent,
+    ContainerComponent,
+    AccountMovementComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +54,12 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
         useFactory: jwtOptionsFactory,
         deps: [AuthenticationProcessService]
       }
-    })
+    }),
+    MatSidenavModule,
+    MatMenuModule,
+    MatListModule,
+    BrowserAnimationsModule,
+    FlexLayoutModule
   ],
   providers: [
     CookieService,
