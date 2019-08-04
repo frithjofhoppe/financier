@@ -1,6 +1,6 @@
 package com.fh.financierbakend.controller;
 
-import com.fh.financierbakend.dto.UserDto;
+import com.fh.financierbakend.dto.AppUserDto;
 import com.fh.financierbakend.service.CurrentUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ public class CurrentUserController {
     }
 
     @GetMapping
-    UserDto getCurrentUser() {
+    AppUserDto getCurrentUser() {
         return this.currentUserService.getCurrentUser();
     }
 }
