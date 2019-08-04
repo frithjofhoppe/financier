@@ -23,6 +23,7 @@ public class MapperConfig {
                         .valuata(source.getValuata())
                         .value(source.getValue())
                         .id(source.getId())
+                        .description(source.getDescription())
                         .movementDirection(MovementDirection.valueOf(source.getMovementDirection()))
                         .build();
             }
@@ -35,6 +36,7 @@ public class MapperConfig {
                         .movementDirection(source.getMovementDirection().value)
                         .valuata(source.getValuata())
                         .value(source.getValue())
+                        .description(source.getDescription())
                         .build();
             }
         });

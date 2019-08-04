@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
+                .mvcMatchers("/h2-console/**").permitAll()
                 .mvcMatchers("/api/accountmovement").hasAuthority("read:account_movement")
                 .mvcMatchers("/api/user").authenticated()
                 .and()

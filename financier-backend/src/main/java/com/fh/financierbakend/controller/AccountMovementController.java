@@ -22,6 +22,16 @@ public class AccountMovementController {
         movementService.createMovement(movementDto);
     }
 
+    @PutMapping
+    public void update(@RequestBody AccountMovementDto movementDto){
+        movementService.updateMovement(movementDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id){
+        movementService.deleteMovement(Long.parseLong(id));
+    }
+
     @GetMapping
     public List<AccountMovementDto> getAllMovements() {
         return movementService.getAllMovements();
