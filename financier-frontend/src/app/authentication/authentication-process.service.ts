@@ -41,6 +41,7 @@ export class AuthenticationProcessService {
   private jwtSubject = new BehaviorSubject<string>(null);
 
   constructor(
+    private router: Router,
     private http: HttpClient,
     private route: ActivatedRoute,
     private jwtHelper: JwtHelperService,
@@ -106,6 +107,7 @@ export class AuthenticationProcessService {
       this.updateStateForLogout();
       throw e;
     }
+    this.router.navigate(['/home']);
   }
 
   private updateStateForLogin() {

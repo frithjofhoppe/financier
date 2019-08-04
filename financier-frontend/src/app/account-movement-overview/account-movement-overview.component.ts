@@ -3,11 +3,11 @@ import {AccountMovementService} from '../service/account-movement.service';
 import {AccountMovement} from './model';
 
 @Component({
-  selector: 'app-account-movement',
-  templateUrl: './account-movement.component.html',
-  styleUrls: ['./account-movement.component.scss']
+  selector: 'app-account-movement-overview',
+  templateUrl: './account-movement-overview.component.html',
+  styleUrls: ['./account-movement-overview.component.scss']
 })
-export class AccountMovementComponent implements OnInit {
+export class AccountMovementOverviewComponent implements OnInit {
 
   accountMovements: AccountMovement[] = [];
 

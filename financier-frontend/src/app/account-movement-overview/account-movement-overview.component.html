@@ -1,0 +1,21 @@
+<app-container>
+  <div fxLayout="column" fxLayoutGap="20px">
+    <div fxFlex>
+      <mat-toolbar color="primary">
+        <button mat-raised-button>
+          Add <mat-icon>add</mat-icon>
+        </button>
+      </mat-toolbar>
+    </div>
+    <app-account-movement-edit fxFlex></app-account-movement-edit>
+    <mat-list>
+      <mat-list-item *ngFor="let item of accountMovements">
+        <mat-card fxLayout="column">
+          <div>{{item.value}}</div>
+          <div>{{item.movementDirection}}</div>
+          <div>{{item.valuata}}</div>
+        </mat-card>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</app-container>

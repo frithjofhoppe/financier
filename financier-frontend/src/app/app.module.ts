@@ -3,7 +3,15 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {MatButtonModule, MatIconModule, MatListModule, MatMenuModule, MatSidenavModule, MatToolbarModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatCardModule, MatDatepickerModule, MatFormFieldModule,
+  MatIconModule, MatInputModule,
+  MatListModule,
+  MatMenuModule, MatNativeDateModule,
+  MatSidenavModule,
+  MatToolbarModule
+} from '@angular/material';
 import {CallbackComponent} from './authentication/callback/callback.component';
 import {LogoutComponent} from './authentication/logout/logout.component';
 import {NavigationComponent} from './navigation/navigation.component';
@@ -17,7 +25,9 @@ import { HomeComponent } from './home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { ContainerComponent } from './common/container/container.component';
-import { AccountMovementComponent } from './account-movement/account-movement.component';
+import { AccountMovementOverviewComponent } from './account-movement-overview/account-movement-overview.component';
+import { AccountMovementEditComponent } from './account-movement-overview/account-movement-edit/account-movement-edit.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
@@ -39,7 +49,8 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     NavigationComponent,
     HomeComponent,
     ContainerComponent,
-    AccountMovementComponent
+    AccountMovementOverviewComponent,
+    AccountMovementEditComponent
   ],
   imports: [
     BrowserModule,
@@ -58,8 +69,15 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     MatSidenavModule,
     MatMenuModule,
     MatListModule,
+    MatCardModule,
     BrowserAnimationsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
+    FormsModule
   ],
   providers: [
     CookieService,

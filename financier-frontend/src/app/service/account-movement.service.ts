@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AccountMovement} from '../account-movement/model';
 import {API} from './api-const';
+import {AccountMovement} from '../account-movement-overview/model';
 
 @Injectable({
   providedIn: 'root'
