@@ -15,4 +15,12 @@ export class AccountMovementService {
   getAccountMovementsForUser(): Observable<AccountMovement[]> {
     return this.http.get<AccountMovement[]>(`${API.url}accountmovement`);
   }
+
+  saveAccountMovement(body: AccountMovement): Observable<void> {
+    return this.http.post<void>(`${API.url}accountmovement`, body);
+  }
+
+  updateAccountMovement(body: AccountMovement): Observable<void> {
+    return this.http.put<void>(`${API.url}accountmovement`, body);
+  }
 }

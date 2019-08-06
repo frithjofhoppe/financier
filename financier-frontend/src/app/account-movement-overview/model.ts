@@ -7,4 +7,5 @@ export interface AccountMovement {
   value: number;
   valuata: string;
   movementDirection: MovementDirection;
+  description: string;
 }

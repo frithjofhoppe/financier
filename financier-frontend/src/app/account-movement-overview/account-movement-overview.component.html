@@ -2,20 +2,47 @@
   <div fxLayout="column" fxLayoutGap="20px">
     <div fxFlex>
       <mat-toolbar color="primary">
-        <button mat-raised-button>
-          Add <mat-icon>add</mat-icon>
+        <button mat-raised-button (click)="showEditField()">
+          Add
+          <mat-icon>add</mat-icon>
         </button>
       </mat-toolbar>
     </div>
-    <app-account-movement-edit fxFlex></app-account-movement-edit>
-    <mat-list>
-      <mat-list-item *ngFor="let item of accountMovements">
-        <mat-card fxLayout="column">
-          <div>{{item.value}}</div>
-          <div>{{item.movementDirection}}</div>
-          <div>{{item.valuata}}</div>
-        </mat-card>
-      </mat-list-item>
-    </mat-list>
+    <div [fxHide]="!isProgressBarVisible">
+      <mat-progress-bar mode="buffer"></mat-progress-bar>
+      <p class="mat-body">Data processing in progress</p>
+    </div>
+    <app-account-movement-edit
+      [mode]="CREATE"
+      [fxHide]="!isEditFieldVisible"
+      (close)="hideEditField()"
+      (save)="saveAccountMovement($event)" fxFlex></app-account-movement-edit>
+    <div fxFlex *ngFor="let item of accountMovements">
+<!--      <div style="margin: 5px 5px 5px" fxLayout="row" fxLayout.xs="column" fxLayoutGap="5px"-->
+<!--                fxLayoutGap.xs="1px">-->
+<!--        <mat-form-field fxFlex appearance="outline">-->
+<!--          <mat-label>Value</mat-label>-->
+<!--          <input [value]="item.value" matInput placeholder="Placeholder">-->
+<!--        </mat-form-field>-->
+<!--        <div fxFlex>-->
+<!--          <mat-form-field fxFlex appearance="outline">-->
+<!--            <mat-label>Direction</mat-label>-->
+<!--            <input [value]="item.movementDirection" matInput placeholder="Placeholder">-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--        <div fxFlex>-->
+<!--          <mat-form-field fxFlex appearance="outline">-->
+<!--            <mat-label>Valuata</mat-label>-->
+<!--            <input [value]="item.valuata" matInput placeholder="Placeholder">-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--      </div>-->
+      <app-account-movement-edit
+        [mode]="EDIT"
+        [editSource]="item"
+      ></app-account-movement-edit>
+      <mat-divider></mat-divider>
+    </div>
   </div>
 </app-container>
+

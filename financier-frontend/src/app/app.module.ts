@@ -4,11 +4,12 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {
+  MAT_DATE_FORMATS,
   MatButtonModule,
-  MatCardModule, MatDatepickerModule, MatFormFieldModule,
+  MatCardModule, MatDatepickerModule, MatDividerModule, MatFormFieldModule,
   MatIconModule, MatInputModule,
   MatListModule,
-  MatMenuModule, MatNativeDateModule,
+  MatMenuModule, MatNativeDateModule, MatProgressBarModule,
   MatSidenavModule,
   MatToolbarModule
 } from '@angular/material';
@@ -21,13 +22,15 @@ import {CookieService} from 'ngx-cookie-service';
 import {AuthenticationProcessService} from './authentication/authentication-process.service';
 import {tap} from 'rxjs/operators';
 import {JwtInterceptorService} from './authentication/jwt-interceptor.service';
-import { HomeComponent } from './home/home.component';
+import {HomeComponent} from './home/home.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import { ContainerComponent } from './common/container/container.component';
-import { AccountMovementOverviewComponent } from './account-movement-overview/account-movement-overview.component';
-import { AccountMovementEditComponent } from './account-movement-overview/account-movement-edit/account-movement-edit.component';
+import {ContainerComponent} from './common/container/container.component';
+import {AccountMovementOverviewComponent} from './account-movement-overview/account-movement-overview.component';
+import {AccountMovementEditComponent} from './account-movement-overview/account-movement-edit/account-movement-edit.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ProgressBarComponent} from './common/progress-bar/progress-bar.component';
+import {MatMomentDateModule, MomentDateModule} from '@angular/material-moment-adapter';
 
 
 export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
@@ -50,7 +53,8 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     HomeComponent,
     ContainerComponent,
     AccountMovementOverviewComponent,
-    AccountMovementEditComponent
+    AccountMovementEditComponent,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,
@@ -76,8 +80,11 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     MatFormFieldModule,
     MatDatepickerModule,
     ReactiveFormsModule,
-    MatNativeDateModule,
-    FormsModule
+    MatMomentDateModule,
+    MomentDateModule,
+    MatProgressBarModule,
+    FormsModule,
+    MatDividerModule
   ],
   providers: [
     CookieService,

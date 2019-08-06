@@ -16,7 +16,7 @@ import java.util.Date;
 public class AccountMovementDto {
     Long id;
     Long value;
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm z")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mmZ")
     Date valuata;
     String description;
     MovementDirection movementDirection;
