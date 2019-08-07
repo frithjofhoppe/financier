@@ -19,29 +19,29 @@
     </mat-form-field>
   </div>
   <div fxLayoutGap="10px" class="button-area" fxLayout="row" fxLayoutAlign="end center">
-    <div *ngIf="isDeleteMode()">
-      <button color="accent" (click)="deleteAccountMovement()" mat-raised-button>
+    <div *ngIf="isDeleteMode()" fxFlex.xs>
+      <button fxFlex.xs color="accent" (click)="deleteAccountMovement()" mat-raised-button>
         Delete
         <mat-icon>delete</mat-icon>
       </button>
     </div>
-    <div *ngIf="isCreateMode()" fxLayoutGap="10px">
-      <button (click)="closeComponent()" mat-raised-button>
+    <div *ngIf="isCreateMode()" fxFlex.xs fxLayoutGap="10px">
+      <button fxFlex.xs (click)="closeComponent()" mat-raised-button>
         Cancel
         <mat-icon>cancel</mat-icon>
       </button>
-      <button mat-raised-button color="primary" (click)="saveAccountMovement()"
+      <button fxFlex.xs mat-raised-button color="primary" (click)="saveAccountMovement()"
               [disabled]="accountMovement.invalid">
         Save
         <mat-icon>save</mat-icon>
       </button>
     </div>
-    <div fxLayoutGap="10px" *ngIf="isEditMode() && hasContentChange()">
-      <button (click)="editCancel()" mat-raised-button>
+    <div fxFlex.xs fxLayoutGap="10px" *ngIf="isEditMode() && hasContentChange()">
+      <button fxFlex.xs (click)="editCancel()" mat-raised-button>
         Cancel
         <mat-icon>cancel</mat-icon>
       </button>
-      <button mat-raised-button color="primary"
+      <button fxFlex.xs mat-raised-button color="primary"
               (click)="editAccountMovement()" [disabled]="accountMovement.invalid">
         Edit
         <mat-icon>edit</mat-icon>

@@ -35,7 +35,7 @@ export class AccountMovementEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.editSource) {
+    if (changes.mode) {
       this.setFormVisibility();
       this.setFormValue();
     }
