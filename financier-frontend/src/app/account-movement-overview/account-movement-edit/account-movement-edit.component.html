@@ -1,6 +1,6 @@
 <div [formGroup]="accountMovement" fxLayout="column">
 
-  <div fxLayout="row" style="margin: 5px 5px 5px" fxLayout.xs="column" fxLayoutGap="10px">
+  <div fxLayout="row" class="input-field" fxLayout.xs="column" fxLayoutGap="10px">
     <mat-form-field fxFlex>
       <mat-label>Amount</mat-label>
       <span matPrefix>CHF&nbsp;</span>
@@ -18,8 +18,14 @@
       <input matInput type="text" formControlName="description">
     </mat-form-field>
   </div>
-  <div fxLayoutGap="10px" fxLayout="row" fxLayoutAlign="end center">
-    <ng-container *ngIf="isCreateMode()">
+  <div fxLayoutGap="10px" class="button-area" fxLayout="row" fxLayoutAlign="end center">
+    <div *ngIf="isDeleteMode()">
+      <button color="accent" (click)="deleteAccountMovement()" mat-raised-button>
+        Delete
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="isCreateMode()" fxLayoutGap="10px">
       <button (click)="closeComponent()" mat-raised-button>
         Cancel
         <mat-icon>cancel</mat-icon>
@@ -29,8 +35,8 @@
         Save
         <mat-icon>save</mat-icon>
       </button>
-    </ng-container>
-    <ng-container *ngIf="isEditMode() && accountMovement.touched">
+    </div>
+    <div fxLayoutGap="10px" *ngIf="isEditMode() && hasContentChange()">
       <button (click)="editCancel()" mat-raised-button>
         Cancel
         <mat-icon>cancel</mat-icon>
@@ -38,8 +44,8 @@
       <button mat-raised-button color="primary"
               (click)="editAccountMovement()" [disabled]="accountMovement.invalid">
         Edit
-        <mat-icon>save</mat-icon>
+        <mat-icon>edit</mat-icon>
       </button>
-    </ng-container>
+    </div>
   </div>
 </div>

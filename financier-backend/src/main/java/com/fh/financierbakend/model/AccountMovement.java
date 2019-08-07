@@ -3,6 +3,7 @@ package com.fh.financierbakend.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Getter
@@ -19,7 +20,7 @@ public class AccountMovement {
     @JoinColumn(name = "user_id", nullable = false)
     AppUser appUser;
     @Column(name = "value")
-    Long value;
+    BigDecimal value;
     @Column(name = "valuata")
     Date valuata;
     @Column(name = "movement_direction")

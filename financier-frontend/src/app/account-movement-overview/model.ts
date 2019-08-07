@@ -4,7 +4,7 @@ export enum MovementDirection {
 
 export interface AccountMovement {
   id: number;
-  value: number;
+  value: string;
   valuata: string;
   movementDirection: MovementDirection;
   description: string;

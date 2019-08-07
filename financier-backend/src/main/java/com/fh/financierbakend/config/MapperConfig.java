@@ -9,6 +9,8 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class MapperConfig {
 
@@ -21,7 +23,7 @@ public class MapperConfig {
                 AccountMovement source = mappingContext.getSource();
                 return AccountMovementDto.builder()
                         .valuata(source.getValuata())
-                        .value(source.getValue())
+                        .value(source.getValue().toString())
                         .id(source.getId())
                         .description(source.getDescription())
                         .movementDirection(MovementDirection.valueOf(source.getMovementDirection()))
@@ -35,7 +37,7 @@ public class MapperConfig {
                 return AccountMovement.builder()
                         .movementDirection(source.getMovementDirection().value)
                         .valuata(source.getValuata())
-                        .value(source.getValue())
+                        .value(new BigDecimal(source.getValue()))
                         .description(source.getDescription())
                         .build();
             }

@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {AccountMovementService} from '../service/account-movement.service';
 import {AccountMovement} from './model';
 import {mergeMap, tap} from 'rxjs/operators';
-import {AccountMovementOutput, ComponentMode} from './account-movement-edit/account-movement-edit.component';
+import {ComponentMode} from './account-movement-edit/account-movement-edit.component';
 import {Observable} from 'rxjs';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-account-movement-overview',
@@ -17,12 +18,18 @@ export class AccountMovementOverviewComponent implements OnInit {
   isProgressBarVisible = false;
   CREATE = ComponentMode.CREATE;
   EDIT = ComponentMode.EDIT;
+  DELETE = ComponentMode.DELETE;
+  currentMode: ComponentMode = ComponentMode.EDIT;
 
-  constructor(private movement: AccountMovementService) {
+  constructor(private movement: AccountMovementService, private matSnackBar: MatSnackBar) {
   }
 
   ngOnInit() {
     this.loadAccountMovements().subscribe();
+  }
+
+  isInDeleteMode() {
+    return this.currentMode === this.DELETE;
   }
 
   showEditField() {
@@ -39,16 +46,16 @@ export class AccountMovementOverviewComponent implements OnInit {
     );
   }
 
-  saveAccountMovement($event: AccountMovementOutput) {
-    this.isProgressBarVisible = true;
-    console.log('in');
-    if ($event.action === ComponentMode.CREATE) {
-      console.log('CREATE');
-      this.updateSourceList(this.movement.saveAccountMovement($event.dto)).subscribe();
-    } else if ($event.action === ComponentMode.EDIT) {
-      console.log('EDIT');
-      this.updateSourceList(this.movement.updateAccountMovement($event.dto)).subscribe();
-    }
+  openSnackBar(message: string, action: string) {
+    this.matSnackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
+  createAccountMovement($event: AccountMovement) {
+    this.updateSourceList(this.movement.saveAccountMovement($event).pipe(
+      tap(() => this.openSnackBar('Movement has been created', 'Create'))
+    )).subscribe();
   }
 
   updateSourceList(ob: Observable<void>): Observable<AccountMovement[]> {
@@ -59,5 +66,19 @@ export class AccountMovementOverviewComponent implements OnInit {
         return this.loadAccountMovements();
       })
     );
+  }
+
+  editAccountMovement($event: AccountMovement) {
+    this.updateSourceList(this.movement.updateAccountMovement($event).pipe(
+      tap(() => this.openSnackBar('Movement has been modified', 'Update'))
+    )).subscribe();
+  }
+
+  enterDeleteMode() {
+    this.currentMode = ComponentMode.DELETE;
+  }
+
+  leaveDeleteMode() {
+    this.currentMode = ComponentMode.EDIT;
   }
 }

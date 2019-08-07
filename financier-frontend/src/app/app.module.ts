@@ -10,7 +10,7 @@ import {
   MatIconModule, MatInputModule,
   MatListModule,
   MatMenuModule, MatNativeDateModule, MatProgressBarModule,
-  MatSidenavModule,
+  MatSidenavModule, MatSnackBarModule,
   MatToolbarModule
 } from '@angular/material';
 import {CallbackComponent} from './authentication/callback/callback.component';
@@ -83,6 +83,7 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     MatMomentDateModule,
     MomentDateModule,
     MatProgressBarModule,
+    MatSnackBarModule,
     FormsModule,
     MatDividerModule
   ],
