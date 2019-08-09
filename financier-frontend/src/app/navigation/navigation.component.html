@@ -22,15 +22,19 @@
       <div *ngIf="user" fxLayout="column" fxLayoutAlign="center center">
         <ngx-avatar fxFlexOffset="10px" fxFlex
           [src]="user.avatar"
-          size="100"
+                                        size="100"
         >
         </ngx-avatar>
         <span fxFlexOffset="10px" fxFlex class="mat-title">Hey {{user.name}}</span>
       </div>
       <mat-divider></mat-divider>
       <div fxLayoutGap="5px" fxLayout="column">
-        <a fxFlex fxFlexOffset="5px" (click)="sideNav.close()" [routerLinkActive]="'is-active'" mat-button routerLink="/home">Home</a>
-        <a fxFlex (click)="sideNav.close()" [routerLinkActive]="'is-active'"  mat-button routerLink="/movement">Movement</a>
+        <a fxFlex fxFlexOffset="5px" (click)="sideNav.close()" [routerLinkActive]="'is-active'" mat-button
+           routerLink="/home">Home
+        </a>
+        <a fxFlex *ngIf="user" (click)="sideNav.close()" [routerLinkActive]="'is-active'" mat-button
+           routerLink="/movement">Movement
+        </a>
       </div>
     </mat-sidenav>
     <mat-sidenav-content fxFlex fxFlexFill>

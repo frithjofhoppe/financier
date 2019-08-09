@@ -1,0 +1,29 @@
+<div id="home" fxFlexFill fxLayout="column" fxLayoutGap="5px">
+  <div id="welcome" fxFlex [style.background]="'lightgray'" fxLayout="column" fxLayoutAlign="center center">
+    <img width="200px" src="assets/big-moustache.svg">
+    <div fxLayoutAlign="center center">
+      <h1 class="mat-display-1">
+        Welcome to Financier
+      </h1>
+    </div>
+  </div>
+  <div id="actions" fxFlex fxLayout.xs="column" fxLayoutAlign.xs="start" fxLayoutAlign="space-evenly center"
+       fxLayoutGap.xs="5px">
+    <mat-card>
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <img width="100px" src="assets/help.svg">
+        <button mat-raised-button>
+          Need help?
+        </button>
+      </div>
+    </mat-card>
+    <mat-card *ngIf="!(auth.isUserLoggedIn | async)">
+      <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px">
+        <img width="100px" src="assets/user.svg">
+        <button mat-raised-button>
+          Create a user
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>
