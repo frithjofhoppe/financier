@@ -1,3 +1,5 @@
+@import '~@angular/material/theming';
+
 .example-icon {
   padding: 0 14px;
 }
@@ -7,7 +9,16 @@
 }
 
 .mat-sidenav {
-  width: 20%
+}
+
+.app-sidenav {
+  padding: 10px 10px 10px 10px;
+}
+
+.is-active{
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
 }
 
 @media (max-width: 450px) {

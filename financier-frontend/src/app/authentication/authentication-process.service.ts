@@ -7,8 +7,11 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import {NoAuthorizationParamsFoundError} from './model/no-authorization-params-found-error';
 import {removeWhitespaces} from '@angular/compiler/src/ml_parser/html_whitespaces';
 import {BasicTokenValidationError} from './model/basic-token-validation-error';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {CookieService} from 'ngx-cookie-service';
+import {User} from '../account-movement-overview/model';
+import {mergeMap, tap} from 'rxjs/operators';
+import {CurrentUserService} from '../service/current-user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -45,6 +48,7 @@ export class AuthenticationProcessService {
     private http: HttpClient,
     private route: ActivatedRoute,
     private jwtHelper: JwtHelperService,
+    private currentUser: CurrentUserService,
     private cookieService: CookieService) {
     this.isUserLoggedIn = this.isUserLoggedInSubject.asObservable();
     this.userProfile = this.userProfileSubject.asObservable();
@@ -99,6 +103,18 @@ export class AuthenticationProcessService {
       '&returnTo=http://localhost:4200/logout';
   }
 
+  public getProfileIfLoggedIn(): Observable<User> {
+    return this.isUserLoggedIn.pipe(
+      mergeMap(loggedIn => {
+        if (loggedIn) {
+          return this.currentUser.getUserProfile().pipe(
+          );
+        }
+        return of(null);
+      })
+    );
+  }
+
   public handleCallback() {
     try {
       this.persistCallbackResponse();
@@ -145,7 +161,7 @@ export class AuthenticationProcessService {
 
   private validateTokenExpirationTime(profile: JwtUserProfile) {
     console.log(new Date());
-    console.log(new Date(Number(profile.exp) * 1000))
+    console.log(new Date(Number(profile.exp) * 1000));
     if (new Date() >= new Date(Number(profile.exp) * 1000)) {
       throw new BasicTokenValidationError('Token has expired');
     }

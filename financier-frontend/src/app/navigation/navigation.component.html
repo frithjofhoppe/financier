@@ -1,11 +1,12 @@
 <div fxFlex fxLayout="column">
   <mat-toolbar fxFlex="6" color="primary">
     <mat-toolbar-row>
-      <button mat-icon-button (click)="toogle()">
+      <button mat-icon-button (click)="toggle()">
         <mat-icon>reorder</mat-icon>
       </button>
       <span>Financier</span>
       <span class="example-spacer"></span>
+      <span fxHide.xs *ngIf="user">Hello {{user.name}}</span>
       <button mat-icon-button *ngIf="!(authProcess.isUserLoggedIn | async)" (click)="authProcess.redirectToLogin()"
               class="example-icon" aria-hidden="false" aria-label="Example heart icon">
         <mat-icon>input</mat-icon>
@@ -17,10 +18,19 @@
     </mat-toolbar-row>
   </mat-toolbar>
   <mat-sidenav-container fxFlexFill fxFlex>
-    <mat-sidenav fxFlex #sidenav mode="over">
-      <div fxLayout="column">
-        <a fxFlex (click)="sideNav.close()" mat-button routerLink="/home">Home</a>
-        <a fxFlex (click)="sideNav.close()" mat-button routerLink="/movement">Movement</a>
+    <mat-sidenav fxFlex class="app-sidenav" #sidenav mode="over" fxLayout="column">
+      <div *ngIf="user" fxLayout="column" fxLayoutAlign="center center">
+        <ngx-avatar fxFlexOffset="10px" fxFlex
+          [src]="user.avatar"
+          size="100"
+        >
+        </ngx-avatar>
+        <span fxFlexOffset="10px" fxFlex class="mat-title">Hey {{user.name}}</span>
+      </div>
+      <mat-divider></mat-divider>
+      <div fxLayoutGap="5px" fxLayout="column">
+        <a fxFlex fxFlexOffset="5px" (click)="sideNav.close()" [routerLinkActive]="'is-active'" mat-button routerLink="/home">Home</a>
+        <a fxFlex (click)="sideNav.close()" [routerLinkActive]="'is-active'"  mat-button routerLink="/movement">Movement</a>
       </div>
     </mat-sidenav>
     <mat-sidenav-content fxFlex fxFlexFill>

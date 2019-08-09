@@ -31,6 +31,8 @@ import {AccountMovementEditComponent} from './account-movement-overview/account-
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ProgressBarComponent} from './common/progress-bar/progress-bar.component';
 import {MatMomentDateModule, MomentDateModule} from '@angular/material-moment-adapter';
+import {IgxAvatarModule, IgxButtonModule} from 'igniteui-angular';
+import {AvatarModule} from 'ngx-avatar';
 
 
 export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
@@ -85,7 +87,8 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     MatProgressBarModule,
     MatSnackBarModule,
     FormsModule,
-    MatDividerModule
+    MatDividerModule,
+    AvatarModule
   ],
   providers: [
     CookieService,
