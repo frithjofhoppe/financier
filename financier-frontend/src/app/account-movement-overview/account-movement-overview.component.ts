@@ -41,8 +41,10 @@ export class AccountMovementOverviewComponent implements OnInit {
   }
 
   private loadAccountMovements() {
+    this.isProgressBarVisible = true;
     return this.movement.getAccountMovementsForUser().pipe(
-      tap(movements => this.accountMovements = movements)
+      tap(movements => this.accountMovements = movements),
+      tap(() =>  this.isProgressBarVisible = false)
     );
   }
 
@@ -61,7 +63,6 @@ export class AccountMovementOverviewComponent implements OnInit {
   updateSourceList(ob: Observable<void>): Observable<AccountMovement[]> {
     return ob.pipe(
       mergeMap(() => {
-        this.isProgressBarVisible = false;
         this.hideEditField();
         return this.loadAccountMovements();
       })
@@ -80,5 +81,11 @@ export class AccountMovementOverviewComponent implements OnInit {
 
   leaveDeleteMode() {
     this.currentMode = ComponentMode.EDIT;
+  }
+
+  deleteAccountMovement($event: number) {
+    this.updateSourceList(this.movement.deleteAccountMovement($event).pipe(
+      tap(() => this.openSnackBar('Movement has been deleted', 'Delete'))
+    )).subscribe();
   }
 }

@@ -23,4 +23,8 @@ export class AccountMovementService {
   updateAccountMovement(body: AccountMovement): Observable<void> {
     return this.http.put<void>(`${API.url}accountmovement`, body);
   }
+
+  deleteAccountMovement(id: number): Observable<void> {
+    return this.http.delete<void>(`${API.url}accountmovement/${id}`);
+  }
 }

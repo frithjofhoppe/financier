@@ -15,6 +15,7 @@ export class AccountMovementEditComponent implements OnInit, OnChanges {
   @Input() editSource: AccountMovement;
   @Output() close = new EventEmitter();
   @Output() create = new EventEmitter<AccountMovement>();
+  @Output() delete = new EventEmitter<number>();
   @Output() edit = new EventEmitter<AccountMovement>();
   beforeEdit: { [k: string]: string };
   accountMovement: FormGroup = new FormGroup({
@@ -28,7 +29,6 @@ export class AccountMovementEditComponent implements OnInit, OnChanges {
     description: new FormControl('')
   });
 
-  // readonly dateFormat = 'YYYY-MM-DDThh:mmZZ';
   readonly dateFormat = 'YYYY-MM-DD';
 
   constructor() {
@@ -63,20 +63,33 @@ export class AccountMovementEditComponent implements OnInit, OnChanges {
         description: this.editSource.description
       };
       this.accountMovement.patchValue(this.beforeEdit);
+    } else if (this.mode === ComponentMode.CREATE) {
+      this.resetForm();
     }
   }
 
   closeComponent() {
     this.close.emit();
+    this.resetForm();
   }
 
   saveAccountMovement() {
     this.create.emit(this.mapToAccountMovement());
+    this.resetForm();
   }
 
   editAccountMovement() {
     console.log('d');
     this.edit.emit(this.mapToAccountMovement(this.editSource.id));
+  }
+
+  private resetForm() {
+    this.accountMovement.reset();
+    this.setCurrentDate();
+  }
+
+  private setCurrentDate() {
+    this.accountMovement.get('date').setValue((new Date()).toISOString());
   }
 
   private mapToAccountMovement(entityId: number = null): AccountMovement {
@@ -117,7 +130,7 @@ export class AccountMovementEditComponent implements OnInit, OnChanges {
   }
 
   deleteAccountMovement() {
-
+    this.delete.emit(this.editSource.id);
   }
 }
 

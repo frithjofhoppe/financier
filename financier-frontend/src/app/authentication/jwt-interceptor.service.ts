@@ -13,10 +13,8 @@ export class JwtInterceptorService implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log('interceptor');
     return this.authProcessService.jwt.pipe(
       mergeMap(jwt => {
-        console.log(jwt);
         let request = req;
         if (jwt) {
           request = req.clone({

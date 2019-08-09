@@ -33,6 +33,7 @@
     <div fxFlex *ngFor="let item of accountMovements; let lasItem = last">
       <app-account-movement-edit
         (edit)="editAccountMovement($event)"
+        (delete)="deleteAccountMovement($event)"
         [mode]="currentMode"
         [editSource]="item"
       ></app-account-movement-edit>

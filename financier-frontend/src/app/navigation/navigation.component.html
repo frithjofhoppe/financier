@@ -16,11 +16,12 @@
       </button>
     </mat-toolbar-row>
   </mat-toolbar>
-  <mat-sidenav-container fxFlex fxFlexFill>
-    <mat-sidenav fxFlex #sidenav mode="side">
-      <mat-nav-list >
-        <a mat-button routerLink="/home">Home</a>
-      </mat-nav-list>
+  <mat-sidenav-container fxFlexFill fxFlex>
+    <mat-sidenav fxFlex #sidenav mode="over">
+      <div fxLayout="column">
+        <a fxFlex (click)="sideNav.close()" mat-button routerLink="/home">Home</a>
+        <a fxFlex (click)="sideNav.close()" mat-button routerLink="/movement">Movement</a>
+      </div>
     </mat-sidenav>
     <mat-sidenav-content fxFlex fxFlexFill>
       <ng-content></ng-content>
