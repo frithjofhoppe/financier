@@ -4,9 +4,9 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {
-  MAT_DATE_FORMATS,
+  MAT_DATE_FORMATS, MatAutocompleteModule,
   MatButtonModule,
-  MatCardModule, MatDatepickerModule, MatDividerModule, MatFormFieldModule,
+  MatCardModule, MatChipsModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule,
   MatIconModule, MatInputModule,
   MatListModule,
   MatMenuModule, MatNativeDateModule, MatProgressBarModule,
@@ -33,6 +33,7 @@ import {ProgressBarComponent} from './common/progress-bar/progress-bar.component
 import {MatMomentDateModule, MomentDateModule} from '@angular/material-moment-adapter';
 import {IgxAvatarModule, IgxButtonModule} from 'igniteui-angular';
 import {AvatarModule} from 'ngx-avatar';
+import { AccountOverviewTagModalComponent } from './account-movement-overview/account-overview-tag-modal/account-overview-tag-modal.component';
 
 
 export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
@@ -56,7 +57,8 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     ContainerComponent,
     AccountMovementOverviewComponent,
     AccountMovementEditComponent,
-    ProgressBarComponent
+    ProgressBarComponent,
+    AccountOverviewTagModalComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +90,9 @@ export function jwtOptionsFactory(tokenService: AuthenticationProcessService) {
     MatSnackBarModule,
     FormsModule,
     MatDividerModule,
-    AvatarModule
+    AvatarModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     CookieService,

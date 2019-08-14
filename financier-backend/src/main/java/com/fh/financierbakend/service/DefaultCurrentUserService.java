@@ -44,7 +44,7 @@ public class DefaultCurrentUserService implements CurrentUserService {
     private AppUser getRepositoryUser(String auth0Id) {
         AppUser byAuth0Id = this.userRepository.findByAuth0Id(auth0Id);
         if (byAuth0Id == null) {
-            this.userRepository.save(new AppUser(null, auth0Id, null));
+            this.userRepository.save(new AppUser(auth0Id));
             return this.userRepository.findByAuth0Id(auth0Id);
         } else {
             return byAuth0Id;

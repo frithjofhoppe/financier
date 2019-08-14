@@ -23,4 +23,10 @@ public class AppUser {
     String auth0Id;
     @OneToMany(mappedBy = "appUser")
     Set<AccountMovement> accountMovements;
+    @OneToMany(mappedBy = "appUser")
+    Set<Tag> tags;
+
+    public AppUser(String auth0Id) {
+        this.auth0Id = auth0Id;
+    }
 }

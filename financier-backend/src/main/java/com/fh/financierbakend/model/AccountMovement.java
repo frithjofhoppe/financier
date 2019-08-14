@@ -23,15 +23,15 @@ public class AccountMovement {
     BigDecimal value;
     @Column(name = "valuata")
     Date valuata;
-    @Column(name = "movement_direction")
-    String movementDirection;
     @Column(name = "description")
     String description;
+    @ManyToOne
+    @JoinColumn(name = "tag_id", nullable = true)
+    Tag tag;
 
     public void updateWith(AccountMovement movement) {
         value = movement.getValue();
         valuata = movement.getValuata();
-        movementDirection = movement.getMovementDirection();
         description = movement.getDescription();
     }
 }

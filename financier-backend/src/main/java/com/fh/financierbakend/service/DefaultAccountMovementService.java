@@ -1,13 +1,12 @@
 package com.fh.financierbakend.service;
 
 import com.fh.financierbakend.dto.AccountMovementDto;
-import com.fh.financierbakend.exception.EntityPersistenceException;
 import com.fh.financierbakend.exception.UnauthorizedOperationException;
 import com.fh.financierbakend.model.AccountMovement;
+import com.fh.financierbakend.model.Tag;
 import com.fh.financierbakend.repository.AccountMovementRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.common.exceptions.UnapprovedClientAuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +19,14 @@ public class DefaultAccountMovementService implements AccountMovementService {
     private final AccountMovementRepository movementRepository;
     private final CurrentUserService currentUserService;
     private final ModelMapper modelMapper;
+    private final TagService tagService;
 
     @Autowired
-    public DefaultAccountMovementService(AccountMovementRepository movementRepository, CurrentUserService currentUserService, ModelMapper modelMapper) {
+    public DefaultAccountMovementService(AccountMovementRepository movementRepository, CurrentUserService currentUserService, ModelMapper modelMapper, TagService tagService) {
         this.movementRepository = movementRepository;
         this.currentUserService = currentUserService;
         this.modelMapper = modelMapper;
+        this.tagService = tagService;
     }
 
     @Override
@@ -42,6 +43,13 @@ public class DefaultAccountMovementService implements AccountMovementService {
         movementDto.setId(null);
         AccountMovement map = modelMapper.map(movementDto, AccountMovement.class);
         map.setAppUser(currentUserService.getCurrentUserAsEntity());
+        if (map.getTag() != null) {
+            Tag repoTag = this.tagService.findTagForCurrentUser(map.getTag());
+            map.setTag(repoTag);
+        } else {
+            map.setTag(null);
+        }
+
         movementRepository.save(map);
     }
 
@@ -56,6 +64,12 @@ public class DefaultAccountMovementService implements AccountMovementService {
             }
             AccountMovement mappedDto = modelMapper.map(movementDto, AccountMovement.class);
             accountMovement.updateWith(mappedDto);
+
+            if (mappedDto.getTag() != null) {
+                Tag repoTag = this.tagService.findTagForCurrentUser(mappedDto.getTag());
+                accountMovement.setTag(repoTag);
+            }
+
             movementRepository.save(accountMovement);
         }
     }

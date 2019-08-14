@@ -1,10 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {AccountMovementService} from '../service/account-movement.service';
-import {AccountMovement} from './model';
+import {AccountMovement, Tag} from './model';
 import {mergeMap, tap} from 'rxjs/operators';
 import {ComponentMode} from './account-movement-edit/account-movement-edit.component';
 import {Observable} from 'rxjs';
 import {MatSnackBar} from '@angular/material';
+import {TagService} from '../service/tag.service';
 
 @Component({
   selector: 'app-account-movement-overview',
@@ -20,12 +21,14 @@ export class AccountMovementOverviewComponent implements OnInit {
   EDIT = ComponentMode.EDIT;
   DELETE = ComponentMode.DELETE;
   currentMode: ComponentMode = ComponentMode.EDIT;
+  tags: Tag[] = [];
 
-  constructor(private movement: AccountMovementService, private matSnackBar: MatSnackBar) {
+  constructor(private movement: AccountMovementService, private matSnackBar: MatSnackBar, private tagService: TagService) {
   }
 
   ngOnInit() {
-    this.loadAccountMovements().subscribe();
+    this.loadAccountMovementsAndTags().subscribe();
+    // this.tagService.getTags().subscribe(tags => this.tags = tags);
   }
 
   isInDeleteMode() {
@@ -40,11 +43,14 @@ export class AccountMovementOverviewComponent implements OnInit {
     this.isEditFieldVisible = false;
   }
 
-  private loadAccountMovements() {
+  private loadAccountMovementsAndTags() {
     this.isProgressBarVisible = true;
     return this.movement.getAccountMovementsForUser().pipe(
       tap(movements => this.accountMovements = movements),
-      tap(() =>  this.isProgressBarVisible = false)
+      mergeMap(() => this.tagService.getTags().pipe(
+        tap(tags => this.tags = tags)
+      )),
+      tap(() => this.isProgressBarVisible = false)
     );
   }
 
@@ -60,11 +66,11 @@ export class AccountMovementOverviewComponent implements OnInit {
     )).subscribe();
   }
 
-  updateSourceList(ob: Observable<void>): Observable<AccountMovement[]> {
+  updateSourceList(ob: Observable<void>): Observable<any> {
     return ob.pipe(
       mergeMap(() => {
         this.hideEditField();
-        return this.loadAccountMovements();
+        return this.loadAccountMovementsAndTags();
       })
     );
   }

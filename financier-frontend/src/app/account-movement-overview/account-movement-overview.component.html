@@ -26,12 +26,14 @@
     </div>
     <app-account-movement-edit
       [mode]="CREATE"
+      [tags]="tags"
       [fxHide]="!isEditFieldVisible"
       (close)="hideEditField()"
       (create)="createAccountMovement($event)" (edit)="createAccountMovement($event)"
       fxFlex></app-account-movement-edit>
     <div fxFlex *ngFor="let item of accountMovements; let lasItem = last">
       <app-account-movement-edit
+        [tags]="tags"
         (edit)="editAccountMovement($event)"
         (delete)="deleteAccountMovement($event)"
         [mode]="currentMode"

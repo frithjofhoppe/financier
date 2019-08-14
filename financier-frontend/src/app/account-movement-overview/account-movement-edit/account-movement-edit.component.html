@@ -17,6 +17,38 @@
       <mat-label>Description</mat-label>
       <input matInput type="text" formControlName="description">
     </mat-form-field>
+
+    <mat-form-field fxFlex class="example-chip-list">
+      <mat-label>Category</mat-label>
+      <mat-chip-list #tagList >
+        <mat-chip
+          *ngFor="let tag of selectedTags"
+          (removed)="removeTag(tag)"
+          [selectable]="selectable"
+          [removable]="true"
+        >
+          {{tag.identifier}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+          type="text"
+          matInput
+          #tagInput
+          formControlName="tag"
+          placeholder="Add tag ..."
+          [matAutocomplete]="auto"
+          [matChipInputFor]="tagList"
+          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          [matChipInputAddOnBlur]="addOnBlur"
+          (matChipInputTokenEnd)="addTagByWriting($event)">
+      </mat-chip-list>
+
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addTagBySelecting($event)">
+        <mat-option #option *ngFor="let tag of registeredTags" [value]="tag">
+          <mat-chip (click)="option.select()">{{tag.identifier}}</mat-chip>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
   </div>
   <div fxLayoutGap="10px" class="button-area" fxLayout="row" fxLayoutAlign="end center">
     <div *ngIf="isDeleteMode()" fxFlex.xs>

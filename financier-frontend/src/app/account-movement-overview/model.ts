@@ -6,8 +6,13 @@ export interface AccountMovement {
   id: number;
   value: string;
   valuata: string;
-  movementDirection: MovementDirection;
   description: string;
+  tag: Tag;
+}
+
+export interface Tag {
+  id: number;
+  identifier: string;
 }
 
 export interface User {
