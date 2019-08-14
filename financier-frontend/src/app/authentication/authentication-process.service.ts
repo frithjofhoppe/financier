@@ -107,8 +107,7 @@ export class AuthenticationProcessService {
     return this.isUserLoggedIn.pipe(
       mergeMap(loggedIn => {
         if (loggedIn) {
-          return this.currentUser.getUserProfile().pipe(
-          );
+          return this.currentUser.getUserProfile();
         }
         return of(null);
       })
@@ -130,8 +129,8 @@ export class AuthenticationProcessService {
     try {
       const profile = this.getProfile();
       this.userProfileSubject.next(profile);
-      this.isUserLoggedInSubject.next(true);
       this.jwtSubject.next(this.getCookie(this.cookieIdTokenKey));
+      this.isUserLoggedInSubject.next(true);
     } catch (e) {
       throw e;
     }
